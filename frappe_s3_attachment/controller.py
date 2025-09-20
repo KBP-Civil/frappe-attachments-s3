@@ -86,6 +86,8 @@ class S3Operations(object):
         day = today.strftime("%d")
 
         doc_path = None
+        if not parent_doctype:
+            parent_doctype = 'File'
 
         if not doc_path:
             if self.folder_name:
