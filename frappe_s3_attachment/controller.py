@@ -90,6 +90,17 @@ class S3Operations(object):
         if not doc_path:
             if self.folder_name:
                 folder = self.folder_name or "home"
+                frappe.log_error({
+                    "folder": folder,
+                    "year": year,
+                    "month": month,
+                    "day": day,
+                    "key": key,
+                    "file_name": file_name,
+                    "parent_doctype": parent_doctype,
+                    "parent_name": parent_name,
+                    "folder_name": self.folder_name
+                }, "S3 Key Generator Debug")
                 final_key = folder + "/" + year + "/" + month +"/" + day + "/" + parent_doctype + "/" + key + "_" + file_name
             else:
                 final_key = year + "/" + month + "/" + day + "/" + parent_doctype + "/" + key + "_" + file_name
