@@ -291,7 +291,8 @@ def upload_existing_files_s3(name):
             )
 
         # Remove file from local.
-        os.remove(file_path)
+        if not os.path.exists(file_path):
+            os.remove(file_path)
 
         frappe.db.sql(
             """UPDATE `tabFile` SET file_url=%s, folder=%s,
@@ -310,9 +311,19 @@ def s3_file_regex_match(file_url):
         file_url
     )
 
+# @frappe.whitelist()
+# def file_upload_to_s3_async():
+#     frappe.enqueue('frappe_s3_attachment.controller.migrate_existing_files', queue='long', timeout=1500)
+    
 @frappe.whitelist()
 def file_upload_to_s3_async():
-    frappe.enqueue('frappe_s3_attachment.controller.migrate_existing_files', queue='long', timeout=1500)
+    frappe.enqueue(
+        'frappe_s3_attachment.controller.migrate_existing_files',
+        queue='long',
+        timeout=3600  # 1 hour
+    )
+    return "Migration job queued. Check background jobs for progress."
+
 
 @frappe.whitelist()
 def migrate_existing_files():

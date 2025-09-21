@@ -10,13 +10,19 @@ frappe.ui.form.on('S3 File Attachment', {
         frappe.call({
             method: "frappe_s3_attachment.controller.file_upload_to_s3_async",
             callback: function (data) {
-                if (data.message) {
-					frappe.msgprint('Upload Successful')
-					location.reload(true);
-                } else {
-                    frappe.msgprint('Retry');
-                }
+                frappe.msgprint(data.message || "Migration job queued.");
             }
         });
+        // frappe.call({
+        //     method: "frappe_s3_attachment.controller.file_upload_to_s3_async",
+        //     callback: function (data) {
+        //         if (data.message) {
+		// 			frappe.msgprint('Upload Successful')
+		// 			location.reload(true);
+        //         } else {
+        //             frappe.msgprint('Retry');
+        //         }
+        //     }
+        // });
     },
 });
