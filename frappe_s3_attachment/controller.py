@@ -291,7 +291,9 @@ def upload_existing_files_s3(name):
             )
 
         # Truncate key for database
-        key_for_db = key[:255]
+        #key_for_db = key[:255]
+        key_for_db = key.encode('utf-8')[:255].decode('utf-8', 'ignore')
+
         # Remove file from local.
         if not os.path.exists(file_path):
             os.remove(file_path)
