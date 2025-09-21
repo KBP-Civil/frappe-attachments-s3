@@ -296,11 +296,13 @@ def upload_existing_files_s3(name):
         if not os.path.exists(file_path):
             os.remove(file_path)
 
+        
         frappe.db.sql(
             """UPDATE `tabFile` SET file_url=%s, folder=%s,
             old_parent=%s, content_hash=%s WHERE name=%s""",
             (file_url, "Home/Attachments", "Home/Attachments", key_for_db, doc.name),
         )
+        doc.content_hash = key_for_db
         frappe.db.commit()
 
 
