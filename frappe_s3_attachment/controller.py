@@ -290,6 +290,8 @@ def upload_existing_files_s3(name):
                 key
             )
 
+        # Truncate key for database
+        key_for_db = key[:255]
         # Remove file from local.
         if not os.path.exists(file_path):
             os.remove(file_path)
@@ -297,7 +299,7 @@ def upload_existing_files_s3(name):
         frappe.db.sql(
             """UPDATE `tabFile` SET file_url=%s, folder=%s,
             old_parent=%s, content_hash=%s WHERE name=%s""",
-            (file_url, "Home/Attachments", "Home/Attachments", key, doc.name),
+            (file_url, "Home/Attachments", "Home/Attachments", key_for_db, doc.name),
         )
         frappe.db.commit()
 
