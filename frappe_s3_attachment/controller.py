@@ -92,17 +92,6 @@ class S3Operations(object):
         if not doc_path:
             if self.folder_name:
                 folder = self.folder_name or "home"
-                # frappe.log_error({
-                #     "folder": folder,
-                #     "year": year,
-                #     "month": month,
-                #     "day": day,
-                #     "key": key,
-                #     "file_name": file_name,
-                #     "parent_doctype": parent_doctype,
-                #     "parent_name": parent_name,
-                #     "folder_name": self.folder_name
-                # }, "S3 Key Generator Debug")
                 final_key = folder + "/" + year + "/" + month +"/" + day + "/" + parent_doctype + "/" + key + "_" + file_name
             else:
                 final_key = year + "/" + month + "/" + day + "/" + parent_doctype + "/" + key + "_" + file_name
@@ -234,6 +223,9 @@ def file_upload_to_s3(doc, method):
                 key
             )
         os.remove(file_path)
+        frappe.log_error({
+                    "key": key
+                }, "S3 Key Generator Debug")
         frappe.db.sql("""UPDATE `tabFile` SET file_url=%s, folder=%s,
             old_parent=%s, content_hash=%s WHERE name=%s""", (
             file_url, 'Home/Attachments', 'Home/Attachments', key, doc.name))
