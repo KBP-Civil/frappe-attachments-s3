@@ -8,7 +8,7 @@ frappe.ui.form.on('S3 File Attachment', {
 	migrate_existing_files: function (frm) {
         frappe.msgprint("Local files getting migrated", "S3 Migration");
         frappe.call({
-            method: "frappe_s3_attachment.controller.migrate_existing_files",
+            method: "frappe_s3_attachment.controller.file_upload_to_s3_async",
             callback: function (data) {
                 if (data.message) {
 					frappe.msgprint('Upload Successful')
