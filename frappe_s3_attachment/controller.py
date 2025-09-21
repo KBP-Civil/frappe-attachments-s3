@@ -310,6 +310,9 @@ def s3_file_regex_match(file_url):
         file_url
     )
 
+@frappe.whitelist()
+def file_upload_to_s3_async():
+    frappe.enqueue('frappe_s3_attachment.controller.migrate_existing_files', queue='long', timeout=1500)
 
 @frappe.whitelist()
 def migrate_existing_files():
@@ -327,6 +330,7 @@ def migrate_existing_files():
             if not s3_file_regex_match(file['file_url']):
                 upload_existing_files_s3(file['name'])
     print("Migration completed.")
+    frappe.logger("frappe_s3_attachment").info("Migration completed.")
     return True
 
 
